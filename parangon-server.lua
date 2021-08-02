@@ -153,6 +153,10 @@ function parangon_addon.setStatsInformation(player, stat, value, flags)
                     return false
                 end
             else
+                if value > player:GetData('parangon_stats_'..stat) then
+                  value = player:GetData('parangon_stats_'..stat)
+                end
+                
                 if (player:GetData('parangon_stats_'..stat) > 0) then
                     player:SetData('parangon_stats_'..stat, (player:GetData('parangon_stats_'..stat) - value))
                     parangon.calcPoints(player)
@@ -209,6 +213,7 @@ end
 
 function parangon.onLogin(event, player)
     local pGuid = player:GetGUIDLow()
+    local pAcc = player:GetAccountId()
 
     local getParangonCharInfo = CharDBQuery('SELECT strength, agility, stamina, intellect FROM `'..parangon.config.db_name..'`.`characters_parangon` WHERE guid = '..pGuid)
     if getParangonCharInfo then
